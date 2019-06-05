@@ -189,6 +189,30 @@ export default class App extends React.Component{
     }
   }
 
+  getEmoji = (type) => {
+    if (type == 'Clear') {
+      return '☀️';
+    }
+    if (type == 'Haze') {
+      return '🌤';
+    }
+    if (type == 'Clouds') {
+      return '☁️';
+    }
+    if (type == 'Sun Shower') {
+      return '🌦️';
+    }
+    if (type == 'Rain') {
+      return '🌧️';
+    }
+    if (type == 'Thunderstorm') {
+      return '⛈️';
+    }
+    if (type == 'Snow') {
+      return '🌨️';
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -216,7 +240,7 @@ export default class App extends React.Component{
                         styles.otherTempStyles
                     ]}
                   >
-                    {item.temp}°C
+                    {this.getEmoji(item.type)} {item.temp}°C
                   </Text>
                   <Text style={styles.cityName}>{item.name}</Text>
                 </View>
@@ -260,15 +284,16 @@ const styles = StyleSheet.create({
     borderBottomColor: 'white'
   },
   cityName: {
-    fontSize: 20,
+    fontSize: 18,
     lineHeight: 40
   },
   otherTempStyles: {
-    fontSize: 30,
+    fontSize: 24,
     lineHeight: 40,
     width: 130,
     marginRight: 15,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    flexDirection: 'row'
   },
   cold: { color: 'blue' },
   comfortable: { color: 'green' },
