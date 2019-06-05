@@ -88,12 +88,10 @@ export default class App extends React.Component{
     };
 
     // this.fetchCityTemp('London', 'UK');
-    // let list = this.getRandom(this.state.cities, 5);
-    // console.log(list);
+    let list = this.getRandom(this.state.cities, 7);
+    console.log(list);
 
     this.fetchTemps();
-    console.log("Words");
-    console.log(this.fetchTemps());
   }
 
   fetchTemps = () => {
@@ -129,16 +127,18 @@ export default class App extends React.Component{
       list: [],
       refresh: true
     })
+    this.fetchTemps(); 
   }
 
   fetchCityTemp = ( city, country, newList ) => {
-    fetch('http://api.openweathermap.org/data/2.5/weather?q='+city+','+country+'&appid=494690a3b8181a49ce0df60f331e6c54', {
-      method: 'post',
-      heders: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      }
-    })
+    fetch('http://api.openweathermap.org/data/2.5/weather?q='+city+','+country+'&appid=494690a3b8181a49ce0df60f331e6c54&units=metric'//, {
+      // method: 'post',
+      // heders: {
+      //   'Accept': 'application/json, text/plain, */*',
+      //   'Content-Type': 'application/json'
+      // }
+       // }
+    )
     .then((response) => response.json())
     // .then((response) => response.text())   //for troubleshooting errors
     .then((responseJson) => {
@@ -178,7 +178,7 @@ export default class App extends React.Component{
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (
             <View>
-              <Text>{item.name}</Text>
+              <Text>{item.temp}C - {item.name}</Text>
             </View>
           )
         }/>
