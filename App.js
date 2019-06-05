@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import homeScreen from './app/screens/homeScreen';
+import searchScreen from './app/screens/searchScreen';
 
-const App = createStackNavigator({
+const App = createBottomTabNavigator({
   Home: { screen: homeScreen },
+  Search: { screen: searchScreen }
 },
 {
   headerMode: 'none',
