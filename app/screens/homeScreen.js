@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, StatusBar, TouchableHighlight } from 'react-native';
+import { LinearGradient } from 'expo';
 
 export default class App extends React.Component{
   constructor(props) {
@@ -148,7 +149,8 @@ export default class App extends React.Component{
         name: obj.name,
         country: country,
         temp: Math.ceil(r.temp),
-        type: obj.weather[0].main
+        type: obj.weather[0].main,
+        description: obj.weather[0].main+' - Humidity: '+r.humidity+'%',
       };
 
       // this.state.list.push(city);
@@ -198,18 +200,28 @@ export default class App extends React.Component{
           onRefresh={this.loadNewTemps}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (
-            <View style={styles.row}>
-            {/* eval() to convert the answer from a string to a non-string:*/}
-              <Text
-                style={[
-                    eval(this.getTempColor(item.temp)),
-                    styles.otherTempStyles
-                ]}
+            <TouchableHighlight
+              underlayColor='rgb(35, 85, 160)'
+              onPress={() => alert(item.description)}
+            >
+              <LinearGradient
+                colors={['rgba(0,0,0,0.2)','rgba(0,0,0,0)']}
+                start={[0, 0.5]}
               >
-                {item.temp}°C
-              </Text>
-              <Text style={styles.cityName}>{item.name}</Text>
-            </View>
+                <View style={styles.row}>
+                {/* eval() to convert the answer from a string to a non-string:*/}
+                  <Text
+                    style={[
+                        eval(this.getTempColor(item.temp)),
+                        styles.otherTempStyles
+                    ]}
+                  >
+                    {item.temp}°C
+                  </Text>
+                  <Text style={styles.cityName}>{item.name}</Text>
+                </View>
+              </LinearGradient>
+            </TouchableHighlight>
           )}
           style={styles.flatListStyles}
         />
