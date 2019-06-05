@@ -88,8 +88,8 @@ export default class App extends React.Component{
     };
 
     // this.fetchCityTemp('London', 'UK');
-    let list = this.getRandom(this.state.cities, 7);
-    console.log(list);
+    // let list = this.getRandom(this.state.cities, 7);
+    // console.log(list);
 
     this.fetchTemps();
   }
@@ -127,7 +127,7 @@ export default class App extends React.Component{
       list: [],
       refresh: true
     })
-    this.fetchTemps(); 
+    this.fetchTemps();
   }
 
   fetchCityTemp = ( city, country, newList ) => {
@@ -167,23 +167,99 @@ export default class App extends React.Component{
     })
   }
 
+  getTempColor = (temp) => {
+    switch(true) {
+      case (temp < 10):
+        // text = "cold";
+        return "styles.cold";
+        break;
+      case (temp < 22):
+        return "styles.comfortable";
+        break;
+      case (temp >= 22):
+        return "styles.hot";
+        break;
+      case (temp > 30):
+        return "styles.veryHot";
+        break;
+      default:
+        return "styles.comfortable";
+    }
+  }
+
   render() {
     return (
-      <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-        <Text>City Weather App</Text>
+      <View style={styles.container}>
+      {/*<StatusBar barStyle="light-content" />*/}
+        <Text style={styles.header}>City Weather App</Text>
         <FlatList
           data={this.state.list}
           refreshing={this.state.refresh}
           onRefresh={this.loadNewTemps}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (
-            <View>
-              <Text>{item.temp}C - {item.name}</Text>
+            <View style={styles.row}>
+            {/* eval() to convert the answer from a string to a non-string:*/}
+              <Text
+                style={[
+                    eval(this.getTempColor(item.temp)),
+                    styles.otherTempStyles
+                ]}
+              >
+                {item.temp}°C
+              </Text>
+              <Text style={styles.cityName}>{item.name}</Text>
             </View>
-          )
-        }/>
+          )}
+          style={styles.flatListStyles}
+        />
 
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  header: {
+    width: '100%',
+    paddingTop: 50,
+    paddingBottom: 15,
+    backgroundColor: 'black',
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  container: {
+    backgroundColor: 'lightblue',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+  },
+  flatListStyles: {
+    width: '100%'
+  },
+  row: {
+    flex: 1,
+    paddingVertical: 25,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: 'white'
+  },
+  cityName: {
+    fontSize: 20,
+    lineHeight: 40
+  },
+  otherTempStyles: {
+    fontSize: 30,
+    lineHeight: 40,
+    width: 130,
+    marginRight: 15,
+    fontWeight: 'bold'
+  },
+  cold: { color: 'blue' },
+  comfortable: { color: 'green' },
+  hot: { color: 'orange' },
+  veryHot: { color: 'red' },
+})
