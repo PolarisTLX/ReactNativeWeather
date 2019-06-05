@@ -88,8 +88,27 @@ export default class App extends React.Component{
     };
 
     // this.fetchCityTemp('London', 'UK');
-    let list = this.getRandom(this.state.cities, 5);
-    console.log(list);
+    // let list = this.getRandom(this.state.cities, 5);
+    // console.log(list);
+
+    this.fetchTemps();
+    console.log("Words");
+    console.log(this.fetchTemps());
+  }
+
+  fetchTemps = () => {
+
+    let newList = [];
+    // this.setState({
+    //   list: newList
+    // })
+
+    let list = this.getRandom(this.state.cities, 7);
+    for (city in list) {
+      let name = list[city].name;
+      let country = list[city].country;
+      this.fetchCityTemp(name, country, newList);
+    }
   }
 
   getRandom = (array, number) => {
@@ -105,10 +124,23 @@ export default class App extends React.Component{
     return result;
   }
 
-  fetchCityTemp = ( city, country ) => {
-    // fetch('http://api/openweathermap/org/data/2.5/weather?q='+city+','+country+'&appid=apikey')
-    fetch('http://api/openweathermap/org/data/2.5/weather?q='+city+','+country+'&appid=f342bc09b6f0bcd7c671338423a7e5cc&units=metric')
+  loadNewTemps = () => {
+    this.setState({
+      list: [],
+      refresh: true
+    })
+  }
+
+  fetchCityTemp = ( city, country, newList ) => {
+    fetch('http://api.openweathermap.org/data/2.5/weather?q='+city+','+country+'&appid=494690a3b8181a49ce0df60f331e6c54', {
+      method: 'post',
+      heders: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }
+    })
     .then((response) => response.json())
+    // .then((response) => response.text())   //for troubleshooting errors
     .then((responseJson) => {
       let r = responseJson.main;
       let obj = responseJson;
@@ -118,13 +150,39 @@ export default class App extends React.Component{
         temp: Math.ceil(r.temp),
         type: obj.weather[0].main
       };
+
+      // this.state.list.push(city);
+      newList.push(city);
+
+      // console.log('before:', this.state.list);
+      this.setState({
+        list: newList,
+        refresh: false
+      });
+      // console.log('after:', this.state.list);
+    })
+    .catch((error) => {
+      console.log('Error message:', error.message);
+      // throw error;
     })
   }
 
   render() {
     return (
       <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-        <Text>homeScreen</Text>
+        <Text>City Weather App</Text>
+        <FlatList
+          data={this.state.list}
+          refreshing={this.state.refresh}
+          onRefresh={this.loadNewTemps}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => (
+            <View>
+              <Text>{item.name}</Text>
+            </View>
+          )
+        }/>
+
       </View>
     )
   }
