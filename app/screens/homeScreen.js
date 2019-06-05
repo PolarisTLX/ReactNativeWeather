@@ -12,9 +12,9 @@ export default class App extends React.Component{
 
   render() {
     return (
-      <View>
+      <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
         <Text>homeScreen</Text>
-      </View>      
+      </View>
     )
   }
 }
